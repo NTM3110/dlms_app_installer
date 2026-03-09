@@ -1,0 +1,618 @@
+.data-container {
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+// ─── Page Header ──────────────────────────────────
+.page-header-bar {
+    display: flex;
+    align-items: flex-start;
+}
+
+.page-header-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+
+    .title-icon {
+        font-size: 38px;
+        width: 38px;
+        height: 38px;
+        color: var(--primary-color);
+        margin-top: 2px;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.2;
+    }
+
+    p {
+        margin: 4px 0 0;
+        font-size: 13px;
+        color: var(--text-secondary);
+    }
+}
+
+// ─── Controls ─────────────────────────────────────
+.controls-card {
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-md) !important;
+
+    mat-card-content {
+        padding: 16px !important;
+    }
+}
+
+.controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-start;
+
+    &.controls-row-bottom {
+        margin-top: 8px;
+        align-items: center;
+    }
+
+    .field-meter {
+        flex: 1 1 220px;
+    }
+
+    .field-date {
+        flex: 1 1 180px;
+    }
+
+    .field-path {
+        flex: 1 1 340px;
+    }
+
+    // ─── Time Range Group ─────────────────────────
+    .time-range-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 0 0 auto;
+
+        .time-range-label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding-left: 2px;
+
+            mat-icon {
+                font-size: 14px;
+                width: 14px;
+                height: 14px;
+            }
+        }
+
+        .time-selects {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            .time-colon {
+                font-size: 20px;
+                font-weight: 700;
+                color: var(--text-secondary);
+                margin-top: -8px;
+            }
+
+            .field-hour {
+                width: 80px;
+            }
+
+            .field-minute {
+                width: 72px;
+            }
+        }
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        padding-top: 4px;
+
+        button {
+            height: 44px;
+            border-radius: 8px !important;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-billing {
+            background: var(--primary-color) !important;
+            color: white !important;
+        }
+
+        .btn-profile {
+            background: var(--success-color) !important;
+            color: white !important;
+        }
+
+        .btn-export {
+            background: #6c757d !important;
+            color: white !important;
+        }
+
+        .btn-report {
+            background: #e65100 !important;
+            color: white !important;
+        }
+    }
+}
+
+// ─── Stat Cards ───────────────────────────────────
+.stat-cards-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
+}
+
+.stat-card {
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    transition: box-shadow 0.2s, transform 0.2s;
+
+    &:hover {
+        box-shadow: var(--shadow-md) !important;
+        transform: translateY(-2px);
+    }
+
+    mat-card-content {
+        padding: 16px !important;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .stat-icon-wrap {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        mat-icon {
+            font-size: 26px;
+            width: 26px;
+            height: 26px;
+        }
+    }
+
+    .stat-info {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.1;
+
+            small {
+                font-size: 0.6em;
+                font-weight: 400;
+                color: var(--text-secondary);
+                margin-left: 3px;
+            }
+        }
+
+        .stat-delta {
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 3px;
+            background: #f1f3f9;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            width: fit-content;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .stat-obis {
+            font-size: 10px;
+            color: var(--text-secondary);
+            font-family: monospace;
+        }
+    }
+}
+
+// ─── Results Card ─────────────────────────────────
+.results-card, .report-card {
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-md) !important;
+    overflow: hidden;
+}
+
+// Section header for billing (no tabs)
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    background: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+
+    mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+    }
+}
+
+// Report card header (orange accent)
+.report-header {
+    background: #e65100 !important;
+}
+
+// ─── Tabs (Profile) ────────────────────────────────
+.result-tabs {
+    ::ng-deep {
+        .mat-mdc-tab-header {
+            background: var(--primary-color);
+        }
+
+        .mat-mdc-tab .mdc-tab__text-label {
+            color: rgba(255, 255, 255, 0.65) !important;
+            font-weight: 600;
+        }
+
+        .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+            color: #fff !important;
+        }
+
+        .mdc-tab-indicator__content--underline {
+            border-color: #fff !important;
+        }
+
+        .mat-mdc-tab-body-content {
+            overflow: hidden;
+        }
+    }
+}
+
+// ─── Chart ────────────────────────────────────────
+.chart-tab-content {
+    padding: 16px 20px 20px;
+}
+
+.chart-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+}
+
+.color-picker-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .color-picker-label {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-secondary);
+
+        mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    .color-swatch {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: transform 0.15s, border-color 0.15s;
+        padding: 0;
+
+        &:hover {
+            transform: scale(1.2);
+        }
+
+        &.active {
+            border-color: #212529;
+            transform: scale(1.25);
+            box-shadow: 0 0 0 2px white inset;
+        }
+    }
+}
+
+.chart-wrapper {
+    width: 100%;
+    background: #f8f9fd;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    padding: 6px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.meter-chart {
+    width: 100%;
+    display: block;
+    height: 320px;
+}
+
+// ─── View Selector (Multi-meter result switcher) ───
+.view-selector-card {
+    border-radius: var(--radius-lg) !important;
+    background: #fdfdfd !important;
+    border: 1px solid var(--border-color) !important;
+    
+    mat-card-content {
+        padding: 12px 18px !important;
+    }
+}
+
+.view-selector-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    .field-view-meter {
+        flex: 0 1 300px;
+        margin-bottom: -1.25em; // Offset material padding
+    }
+}
+
+.view-status-badge {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid #bbdefb;
+}
+
+.chart-note {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 8px 0 0;
+    text-align: center;
+}
+
+// ─── Tables ───────────────────────────────────────
+.table-scroll-wrap {
+    max-height: 560px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.full-table {
+    width: 100%;
+
+    // High-contrast header: dark navy background, white text, larger font
+    th.mat-mdc-header-cell {
+        background: #011b6e !important; // --primary-dark
+        color: #ffffff !important;
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 16px 18px !important;
+        border-bottom: 3px solid #FF6D00 !important; // accent underline for extra separation
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        white-space: nowrap;
+    }
+
+    td.mat-mdc-cell {
+        padding: 11px 18px !important;
+        font-size: 13px;
+        border-bottom: 1px solid var(--border-color) !important;
+        color: var(--text-primary);
+    }
+
+    tr.mat-mdc-row:nth-child(even) td.mat-mdc-cell {
+        background: #f7f9ff;
+    }
+
+    tr.mat-mdc-row:hover td.mat-mdc-cell {
+        background: rgba(1, 37, 150, 0.05) !important;
+        transition: background 0.15s;
+    }
+}
+
+// Profile table — narrower cells for many columns
+.profile-table {
+
+    td.mat-mdc-cell,
+    th.mat-mdc-header-cell {
+        padding: 10px 12px !important;
+        min-width: 60px;
+        font-size: 12px;
+    }
+}
+
+.obis-badge {
+    background: #e8ecff;
+    color: var(--primary-color);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-family: monospace;
+    white-space: nowrap;
+}
+
+// ─── Missing Report Table ─────────────────────────
+.missing-report-table {
+    td.mat-mdc-cell,
+    th.mat-mdc-header-cell {
+        vertical-align: middle;
+    }
+}
+
+.missing-badge {
+    display: inline-block;
+    background: #fff3e0;
+    color: #e65100;
+    border: 1px solid #ffcc80;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 99px;
+    font-family: monospace;
+    margin: 2px 4px 2px 0;
+    white-space: nowrap;
+}
+
+.ok-badge {
+    display: inline-block;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 99px;
+}
+
+.value-cell {
+    color: var(--primary-dark, #011b6e);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.unit-badge {
+    background: #e9ecef;
+    color: var(--text-secondary);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+// ─── Loading ─────────────────────────────────────
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 72px 0;
+    gap: 16px;
+    color: var(--text-secondary);
+
+    p {
+        font-size: 14px;
+        margin: 0;
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+}
+
+// ─── Empty State ──────────────────────────────────
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 24px;
+    text-align: center;
+    background: white;
+    border-radius: var(--radius-lg);
+    border: 2px dashed var(--border-color);
+
+    .empty-icon {
+        font-size: 80px;
+        width: 80px;
+        height: 80px;
+        color: #dee2e6;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        margin: 0 0 8px;
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1.7;
+    }
+}
+
+// ─── Responsive ──────────────────────────────────
+@media (max-width: 768px) {
+    .data-container {
+        padding: 12px;
+    }
+
+    .controls-row {
+        flex-direction: column;
+
+        .field-meter,
+        .field-date,
+        .field-path,
+        .time-range-group {
+            flex: 1 1 100%;
+            width: 100%;
+        }
+
+        .action-buttons {
+            width: 100%;
+
+            button {
+                flex: 1;
+            }
+        }
+    }
+
+    .view-selector-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        
+        .field-view-meter {
+            width: 100%;
+        }
+    }
+
+    .stat-cards-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}

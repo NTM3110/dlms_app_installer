@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+sqlalchemy>=2.0
+pydantic
+python-multipart
+psycopg2-binary
+celery
+redis
+gurux-dlms==1.0.196
+gurux-serial==1.0.21
+gurux-common==1.0.13
+gurux-net==1.0.22

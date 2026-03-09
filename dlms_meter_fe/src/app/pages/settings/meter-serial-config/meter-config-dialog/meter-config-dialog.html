@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>
+    <mat-icon style="vertical-align: middle; margin-right: 8px;">speed</mat-icon>
+    {{ isEditMode ? 'Edit Meter Configuration' : 'Add Meter Configuration' }}
+</h2>
+
+<mat-dialog-content>
+    <form [formGroup]="meterForm" style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px;">
+        <mat-form-field appearance="outline">
+            <mat-label>Outstation</mat-label>
+            <input matInput formControlName="outstation" placeholder="e.g. MP-01">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Meter Name</mat-label>
+            <input matInput formControlName="meter_name" placeholder="e.g. Test Meter">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Serial Connection</mat-label>
+            <mat-select formControlName="serial_id">
+                <mat-option *ngFor="let s of serials" [value]="s.id">{{s.name}} ({{s.port}})</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Meter's HDLC Address</mat-label>
+            <input matInput type="number" formControlName="meter_hdlc_id">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>SN/LN Referencing</mat-label>
+            <mat-select formControlName="sn_referencing">
+                <mat-option *ngFor="let ref of snReferences" [value]="ref.value">{{ref.label}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="meterForm.invalid">
+        <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+        {{ isEditMode ? 'Save' : 'Add' }}
+    </button>
+</mat-dialog-actions>

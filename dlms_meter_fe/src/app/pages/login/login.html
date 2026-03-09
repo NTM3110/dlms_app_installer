@@ -1,0 +1,50 @@
+<div class="login-container">
+    <mat-card class="login-card">
+        <div class="login-header">
+            <img src="assets/images/MAXiMeter_Logo.png" alt="MAXiMeter Logo" class="login-logo" />
+            <h1 class="login-title">Advanced Metering Infrastructure System</h1>
+            <p class="login-subtitle">Meter Data Collection and Management System</p>
+        </div>
+
+        <mat-card-content>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Username</mat-label>
+                    <input matInput formControlName="username" placeholder="Enter username" autocomplete="username" />
+                    <mat-icon matPrefix>person</mat-icon>
+                    <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+                        Please enter username
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+                        placeholder="Enter password" autocomplete="current-password" />
+                    <mat-icon matPrefix>lock</mat-icon>
+                    <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword"
+                        [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'">
+                        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+                        Please enter password
+                    </mat-error>
+                </mat-form-field>
+
+                <div class="error-message" *ngIf="errorMessage">
+                    <mat-icon>error</mat-icon>
+                    {{ errorMessage }}
+                </div>
+
+                <button mat-raised-button color="primary" type="submit" class="login-button" [disabled]="isLoading">
+                    <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+                    <span *ngIf="!isLoading">Login</span>
+                </button>
+            </form>
+        </mat-card-content>
+
+        <div class="login-footer">
+            <span>&copy; 2025 DLMS Meter App. All Rights Reserved.</span>
+        </div>
+    </mat-card>
+</div>

@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../energy_app"
+		},
+		{
+			"path": "../../Gurux.DLMS.Python"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {}
+}

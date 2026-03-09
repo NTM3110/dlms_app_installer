@@ -1,0 +1,23 @@
+<mat-card class="settings-card">
+  <mat-card-header>
+    <mat-card-title>CSV Storage Settings</mat-card-title>
+    <mat-card-subtitle>Configure the folder where CSV data files are stored</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="pathForm" (ngSubmit)="savePath()" class="settings-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>CSV Folder Path</mat-label>
+        <input matInput formControlName="csv_path" placeholder="e.g. C:\\MaxiMeter\data">
+        <mat-icon matSuffix>folder</mat-icon>
+        <mat-hint>All existing files will be moved when the path changes</mat-hint>
+      </mat-form-field>
+      
+      <div class="actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="pathForm.invalid || loading">
+          <mat-icon>save</mat-icon>
+          Update Path and Migrate Files
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

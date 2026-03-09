@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>
+    <mat-icon style="vertical-align: middle; margin-right: 8px;">cable</mat-icon>
+    {{ isEditMode ? 'Edit Serial Connection' : 'Add Serial Connection' }}
+</h2>
+
+<mat-dialog-content>
+    <form [formGroup]="serialForm" style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px;">
+        <mat-form-field appearance="outline">
+            <mat-label>Connection Name</mat-label>
+            <input matInput formControlName="name" placeholder="e.g. COM Connection 1">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Port</mat-label>
+            <mat-select formControlName="port">
+                <mat-option *ngFor="let p of availablePorts" [value]="p">{{p}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Baud Rate</mat-label>
+            <mat-select formControlName="baud_rate">
+                <mat-option *ngFor="let rate of baudRates" [value]="rate">{{rate}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Data Options</mat-label>
+            <mat-select formControlName="data_parity">
+                <mat-option *ngFor="let opt of dataParityOptions" [value]="opt">{{opt.label}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Stop Bits</mat-label>
+            <input matInput type="number" formControlName="stop_bits">
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="serialForm.invalid">
+        <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+        {{ isEditMode ? 'Save' : 'Add' }}
+    </button>
+</mat-dialog-actions>

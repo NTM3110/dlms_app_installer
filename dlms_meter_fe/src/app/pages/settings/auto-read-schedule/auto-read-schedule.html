@@ -1,0 +1,35 @@
+<div class="page-container" style="padding: 24px; max-width: 800px; margin: 0 auto; box-sizing: border-box;">
+    <div class="header-section" style="margin-bottom: 24px;">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 500; color: rgba(0,0,0,0.87);">Auto Read Schedule Config
+        </h1>
+        <p style="margin: 8px 0 0 0; color: rgba(0,0,0,0.6);">Configure the automated daily data collection schedule.
+        </p>
+    </div>
+
+    <mat-card>
+        <mat-card-header>
+            <mat-icon style="margin-right: 8px; align-self: center;">schedule</mat-icon>
+            <mat-card-title style="align-self: center;">Daily Auto Read Schedule</mat-card-title>
+        </mat-card-header>
+        <mat-card-content style="margin-top: 16px;">
+            <p style="margin-bottom: 24px;">Set the time of day when the system will automatically connect to meters and
+                read the previous day's profile data.</p>
+
+            <form [formGroup]="scheduleForm" (ngSubmit)="saveSchedule()"
+                style="display: flex; flex-direction: column; gap: 16px;">
+                <mat-form-field appearance="outline" style="max-width: 200px;">
+                    <mat-label>Read Time (HH:MM)</mat-label>
+                    <input matInput type="time" formControlName="read_time">
+                    <mat-icon matSuffix>access_time</mat-icon>
+                </mat-form-field>
+
+                <div>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="scheduleForm.invalid">
+                        <mat-icon>save</mat-icon>
+                        Save Schedule
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
