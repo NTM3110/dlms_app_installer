@@ -1,58 +1,61 @@
-<div class="page-container" style="padding: 24px; max-width: 1400px; margin: 0 auto; box-sizing: border-box;">
-    <div class="header-section" style="margin-bottom: 24px;">
-        <h1 style="margin: 0; font-size: 24px; font-weight: 500; color: rgba(0,0,0,0.87);">Meter & Serial Configuration
-        </h1>
-        <p style="margin: 8px 0 0 0; color: rgba(0,0,0,0.6);">Manage your serial connections and meter specific
-            configurations here.</p>
+<div class="config-page">
+
+    <!-- Page Title -->
+    <div class="config-title">
+        <h1>Serial / TCP Configuration</h1>
     </div>
 
-    <div class="content-grid" style="display: grid; grid-template-columns: 1fr; gap: 24px;">
-        <!-- SERIAL CONFIGURATION -->
-        <mat-card>
-            <mat-card-header style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="display: flex; align-items: center;">
-                    <mat-icon style="margin-right: 8px; align-self: center;">cable</mat-icon>
-                    <mat-card-title style="align-self: center; margin-bottom: 0;">Serial Ports</mat-card-title>
+    <!-- Tab Group matching the screenshot layout -->
+    <mat-tab-group class="config-tabs" animationDuration="150ms">
+
+        <!-- ══ TAB 1: Serial Port Configuration ═════════════════ -->
+        <mat-tab label="Serial Port Configuration">
+            <div class="tab-content">
+                <div class="tab-toolbar">
+                    <button mat-raised-button color="primary" (click)="openSerialDialog()">
+                        <mat-icon>add</mat-icon> Add New Port
+                    </button>
                 </div>
-                <button mat-raised-button color="primary" (click)="openSerialDialog()">
-                    <mat-icon>add</mat-icon> Add Serial
-                </button>
-            </mat-card-header>
-            <mat-card-content style="margin-top: 16px;">
-                <div class="table-container" style="overflow-x: auto;">
-                    <table mat-table [dataSource]="serialsDataSource" class="mat-elevation-z1" style="width: 100%;">
+
+                <div class="table-wrap">
+                    <table mat-table [dataSource]="serialsDataSource" class="config-table">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef>#</th>
+                            <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+                        </ng-container>
+
                         <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef> Name </th>
-                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                            <th mat-header-cell *matHeaderCellDef>Display Name</th>
+                            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="port">
-                            <th mat-header-cell *matHeaderCellDef> Port </th>
-                            <td mat-cell *matCellDef="let element"> {{element.port}} </td>
+                            <th mat-header-cell *matHeaderCellDef>Port</th>
+                            <td mat-cell *matCellDef="let element">{{ element.port }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="baud_rate">
-                            <th mat-header-cell *matHeaderCellDef> Baud Rate </th>
-                            <td mat-cell *matCellDef="let element"> {{element.baud_rate}} </td>
+                            <th mat-header-cell *matHeaderCellDef>Baud Rate</th>
+                            <td mat-cell *matCellDef="let element">{{ element.baud_rate }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="data_bits">
-                            <th mat-header-cell *matHeaderCellDef> Data Bits </th>
-                            <td mat-cell *matCellDef="let element"> {{element.data_bits}} </td>
+                            <th mat-header-cell *matHeaderCellDef>Data Bits</th>
+                            <td mat-cell *matCellDef="let element">{{ element.data_bits }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="stop_bits">
-                            <th mat-header-cell *matHeaderCellDef> Stop Bits </th>
-                            <td mat-cell *matCellDef="let element"> {{element.stop_bits}} </td>
+                            <th mat-header-cell *matHeaderCellDef>Stop Bits</th>
+                            <td mat-cell *matCellDef="let element">{{ element.stop_bits }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="parity">
-                            <th mat-header-cell *matHeaderCellDef> Parity </th>
-                            <td mat-cell *matCellDef="let element"> {{element.parity}} </td>
+                            <th mat-header-cell *matHeaderCellDef>Parity</th>
+                            <td mat-cell *matCellDef="let element">{{ element.parity }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="actions">
-                            <th mat-header-cell *matHeaderCellDef> Actions </th>
+                            <th mat-header-cell *matHeaderCellDef>Actions</th>
                             <td mat-cell *matCellDef="let element">
                                 <button mat-icon-button color="accent" (click)="openSerialDialog(element)"
                                     matTooltip="Edit">
@@ -69,58 +72,61 @@
                         <tr mat-row *matRowDef="let row; columns: serialColumns;"></tr>
 
                         <tr class="mat-row" *matNoDataRow>
-                            <td class="mat-cell" colspan="7" style="text-align: center; padding: 24px;">No serial ports
-                                configured.</td>
+                            <td class="mat-cell empty-state" colspan="8">
+                                <mat-icon>cable</mat-icon>
+                                <span>No serial ports have been configured.</span>
+                            </td>
                         </tr>
                     </table>
                 </div>
-            </mat-card-content>
-        </mat-card>
+            </div>
+        </mat-tab>
 
-        <!-- METER CONFIGURATION -->
-        <mat-card>
-            <mat-card-header style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="display: flex; align-items: center;">
-                    <mat-icon style="margin-right: 8px; align-self: center;">speed</mat-icon>
-                    <mat-card-title style="align-self: center; margin-bottom: 0;">Meter Configurations</mat-card-title>
+        <!-- ══ TAB 2: Meter Configuration ═══════════════════════ -->
+        <mat-tab label="Meter Configuration">
+            <div class="tab-content">
+                <div class="tab-toolbar">
+                    <button mat-raised-button color="primary" (click)="openMeterDialog()">
+                        <mat-icon>add</mat-icon> Add New Meter
+                    </button>
                 </div>
-                <button mat-raised-button color="primary" (click)="openMeterDialog()">
-                    <mat-icon>add</mat-icon> Add Meter
-                </button>
-            </mat-card-header>
-            <mat-card-content style="margin-top: 16px;">
-                <div class="table-container" style="overflow-x: auto;">
-                    <table mat-table [dataSource]="metersDataSource" class="mat-elevation-z1" style="width: 100%;">
+
+                <div class="table-wrap">
+                    <table mat-table [dataSource]="metersDataSource" class="config-table">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef>#</th>
+                            <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+                        </ng-container>
+
                         <ng-container matColumnDef="outstation">
-                            <th mat-header-cell *matHeaderCellDef> Outstation </th>
-                            <td mat-cell *matCellDef="let element"> {{element.outstation}} </td>
+                            <th mat-header-cell *matHeaderCellDef>Outstation ID</th>
+                            <td mat-cell *matCellDef="let element">{{ element.outstation }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="meter_name">
-                            <th mat-header-cell *matHeaderCellDef> Meter Name </th>
-                            <td mat-cell *matCellDef="let element"> {{element.meter_name}} </td>
+                            <th mat-header-cell *matHeaderCellDef>Meter Name</th>
+                            <td mat-cell *matCellDef="let element">{{ element.meter_name }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="serial_id">
-                            <th mat-header-cell *matHeaderCellDef> Serial Connection </th>
-                            <td mat-cell *matCellDef="let element"> {{ getSerialName(element.serial_id) }} </td>
+                            <th mat-header-cell *matHeaderCellDef>Serial Connection</th>
+                            <td mat-cell *matCellDef="let element">{{ getSerialName(element.serial_id) }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="meter_hdlc_id">
-                            <th mat-header-cell *matHeaderCellDef> Meter ID </th>
-                            <td mat-cell *matCellDef="let element"> {{element.meter_hdlc_id}} </td>
+                            <th mat-header-cell *matHeaderCellDef>Meter HDLC ID</th>
+                            <td mat-cell *matCellDef="let element">{{ element.meter_hdlc_id }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="sn_referencing">
-                            <th mat-header-cell *matHeaderCellDef> Referencing </th>
+                            <th mat-header-cell *matHeaderCellDef>Referencing</th>
                             <td mat-cell *matCellDef="let element">
                                 {{ element.sn_referencing === 'sn' ? 'Short Name' : 'Logical Name' }}
                             </td>
                         </ng-container>
 
-
                         <ng-container matColumnDef="actions">
-                            <th mat-header-cell *matHeaderCellDef> Actions </th>
+                            <th mat-header-cell *matHeaderCellDef>Actions</th>
                             <td mat-cell *matCellDef="let element">
                                 <button mat-icon-button color="accent" (click)="openMeterDialog(element)"
                                     matTooltip="Edit">
@@ -137,12 +143,16 @@
                         <tr mat-row *matRowDef="let row; columns: meterColumns;"></tr>
 
                         <tr class="mat-row" *matNoDataRow>
-                            <td class="mat-cell" colspan="8" style="text-align: center; padding: 24px;">No meters
-                                configured.</td>
+                            <td class="mat-cell empty-state" colspan="7">
+                                <mat-icon>speed</mat-icon>
+                                <span>No meters have been configured.</span>
+                            </td>
                         </tr>
                     </table>
                 </div>
-            </mat-card-content>
-        </mat-card>
-    </div>
+            </div>
+        </mat-tab>
+
+    </mat-tab-group>
+
 </div>

@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DlmsService } from '../../../services/dlms.service';
 import { SerialConfigDialog } from './serial-config-dialog/serial-config-dialog';
@@ -23,7 +24,8 @@ import { MeterConfigDialog } from './meter-config-dialog/meter-config-dialog';
     MatSnackBarModule,
     MatDividerModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTabsModule
   ],
   templateUrl: './meter-serial-config.html',
   styleUrl: './meter-serial-config.scss'
@@ -33,8 +35,8 @@ export class MeterSerialConfig implements OnInit {
   metersDataSource = new MatTableDataSource<any>([]);
   availablePorts: string[] = [];
 
-  serialColumns: string[] = ['name', 'port', 'baud_rate', 'data_bits', 'stop_bits', 'parity', 'actions'];
-  meterColumns: string[] = ['outstation', 'meter_name', 'serial_id', 'meter_hdlc_id', 'sn_referencing', 'actions'];
+  serialColumns: string[] = ['index', 'name', 'port', 'baud_rate', 'data_bits', 'stop_bits', 'parity', 'actions'];
+  meterColumns: string[] = ['index', 'outstation', 'meter_name', 'serial_id', 'meter_hdlc_id', 'sn_referencing', 'actions'];
 
   constructor(
     private dlmsService: DlmsService,

@@ -4,18 +4,20 @@ from PyInstaller.utils.hooks import collect_data_files, collect_all
 # Collect static files from FastAPI static directory if it exists
 datas = [('static', 'static'), ('driver/meter_cache.xml', 'driver')]
 
-# Collect gurux_dlms text data files which might be needed
-datas += collect_data_files('gurux_dlms')
+# Collect ALL gurux_dlms files (data, binaries, and hidden imports/submodules)
+gurux_datas, gurux_binaries, gurux_hiddenimports = collect_all('gurux_dlms')
+datas += gurux_datas
 
 celery_datas, celery_binaries, celery_hiddenimports = collect_all('celery')
 kombu_datas, kombu_binaries, kombu_hiddenimports = collect_all('kombu')
+serial_datas, serial_binaries, serial_hiddenimports = collect_all('serial')
 
-datas += celery_datas + kombu_datas
+datas += celery_datas + kombu_datas + serial_datas
 
 a = Analysis(
     ['run.py'],
     pathex=[],
-    binaries=[] + celery_binaries + kombu_binaries,
+    binaries=[] + gurux_binaries + celery_binaries + kombu_binaries + serial_binaries,
     datas=datas,
     hiddenimports=[
         'uvicorn.logging', 
@@ -30,9 +32,13 @@ a = Analysis(
         'uvicorn.lifespan.on',
         'service.tasks',
         'main',
-        'psycopg2', # Needed for postgresql driver
+        'psycopg2',
         'winreg',
-    ] + celery_hiddenimports + kombu_hiddenimports,
+        'pystray',
+        'PIL',
+        'PIL.Image',
+        'PIL.ImageDraw',
+    ] + gurux_hiddenimports + celery_hiddenimports + kombu_hiddenimports + serial_hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -52,7 +58,7 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=True,
+    console=False,       # no terminal window — app lives in system tray only
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,

@@ -4,6 +4,8 @@ import sys
 import signal
 import socket
 import time
+import threading
+import webbrowser
 from typing import Mapping, Sequence
 from dataclasses import dataclass
 
@@ -160,7 +162,12 @@ def start_server() -> int:
     celery_p = _start(cmd.celery, env)
     celery_beat_p = _start(cmd.celery_beat, env)
     
-    def _shutdown(exit_code: int) -> None:
+
+    # ── Shutdown event (triggered by tray "Quit" or a crashed subprocess) ──
+    stop_event = threading.Event()
+
+    def _shutdown(exit_code: int = 0) -> None:
+        stop_event.set()  # wake up the main loop
         _stop(celery_beat_p, term_timeout_s=5.0, kill_timeout_s=2.0)
         _stop(celery_p, term_timeout_s=5.0, kill_timeout_s=2.0)
         _stop(uvicorn_p, term_timeout_s=2.0, kill_timeout_s=2.0)
@@ -172,7 +179,59 @@ def start_server() -> int:
     signal.signal(signal.SIGINT, _handle)
     signal.signal(signal.SIGTERM, _handle)
 
-    while True:
+    # ── System tray icon ──────────────────────────────────────────────────
+    def _make_tray_icon():
+        """Build a minimal 64x64 blue-circle icon without requiring image files."""
+        try:
+            from PIL import Image, ImageDraw
+            img = Image.new('RGBA', (64, 64), (0, 0, 0, 0))
+            draw = ImageDraw.Draw(img)
+            draw.ellipse([4, 4, 60, 60], fill=(1, 37, 150, 255))   # dark blue
+            draw.ellipse([20, 20, 44, 44], fill=(255, 255, 255, 200))  # white dot
+            return img
+        except Exception:
+            # Fallback: 1x1 transparent image if PIL is unavailable
+            try:
+                from PIL import Image
+                return Image.new('RGBA', (1, 1), (0, 0, 0, 0))
+            except Exception:
+                return None
+
+    def _run_tray():
+        try:
+            import pystray
+            from pystray import MenuItem as TrayItem, Menu as TrayMenu
+
+            icon_image = _make_tray_icon()
+            if not icon_image:
+                return  # pystray or PIL not available — silently skip tray
+
+            def _open_dashboard(icon, item):
+                webbrowser.open('http://localhost:8000')
+
+            def _quit(icon, item):
+                icon.stop()
+                _shutdown(0)
+
+            tray = pystray.Icon(
+                'dlms_meter_app',
+                icon_image,
+                'DLMS Meter App — Running',
+                menu=TrayMenu(
+                    TrayItem('Open Dashboard', _open_dashboard, default=True),
+                    TrayMenu.SEPARATOR,
+                    TrayItem('Stop & Quit', _quit),
+                )
+            )
+            tray.run()   # blocks this thread until icon.stop() is called
+        except Exception as e:
+            print(f'[Tray] Could not start system tray: {e}', file=sys.stderr)
+
+    tray_thread = threading.Thread(target=_run_tray, daemon=True, name='tray')
+    tray_thread.start()
+
+    # ── Monitor subprocesses ──────────────────────────────────────────────
+    while not stop_event.is_set():
         uvicorn_rc = uvicorn_p.poll()
         celery_rc = celery_p.poll()
         celery_beat_rc = celery_beat_p.poll()
@@ -182,7 +241,7 @@ def start_server() -> int:
 
         if celery_rc is not None:
             _shutdown(celery_rc if celery_rc != 0 else 1)
-            
+
         if celery_beat_rc is not None:
             _shutdown(celery_beat_rc if celery_beat_rc != 0 else 1)
 
@@ -203,6 +262,14 @@ if __name__ == "__main__":
 
     cmd_arg = sys.argv[1]
 
+    # When frozen with console=False, sys.stdout and sys.stderr are None.
+    # Redirect them to a log file so any library that tries to print/log doesn't crash.
+    if getattr(sys, 'frozen', False) and sys.stdout is None:
+        _log_path = os.path.join(APP_DATA_DIR, 'app.log')
+        _log_file = open(_log_path, 'a', buffering=1, encoding='utf-8')
+        sys.stdout = _log_file
+        sys.stderr = _log_file
+
     if cmd_arg == "serve":
         print("Initializing database (safe to re-run)...")
         init_db()
@@ -216,12 +283,13 @@ if __name__ == "__main__":
 
     elif cmd_arg == "serve_celery":
         from service.tasks import celery_app
-        # Run Celery worker
+        _worker_log = os.path.join(APP_DATA_DIR, 'celery-worker.log')
         argv = [
             'worker',
             '--loglevel=INFO',
             '--pool=solo',
-            '--concurrency=1'
+            '--concurrency=1',
+            '--logfile', _worker_log,
         ]
         celery_app.worker_main(argv)
         sys.exit(0)
@@ -229,9 +297,9 @@ if __name__ == "__main__":
     elif cmd_arg == "serve_celery_beat":
         from service.tasks import celery_app
         from celery.apps.beat import Beat
-        # Run Celery beat
         schedule_path = os.path.join(APP_DATA_DIR, "celerybeat-schedule")
-        beat = Beat(app=celery_app, loglevel='INFO', schedule=schedule_path)
+        _beat_log = os.path.join(APP_DATA_DIR, 'celery-beat.log')
+        beat = Beat(app=celery_app, loglevel='INFO', schedule=schedule_path, logfile=_beat_log)
         beat.run()
         sys.exit(0)
 

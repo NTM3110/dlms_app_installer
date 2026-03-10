@@ -35,7 +35,7 @@ The backend executable needs to be recompiled using the existing [build.spec](fi
    ```
 2. Activate the virtual environment (Important! This contains PyInstaller):
    ```powershell
-   .\venv\Scripts\activate
+   .\.venv\Scripts\activate
    ```
 3. Clean existing `build` and `dist` folders:
    ```powershell

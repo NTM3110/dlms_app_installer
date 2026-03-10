@@ -1,6 +1,10 @@
 @echo off
 setlocal enabledelayedexpansion
 
+:: Force working directory to the location of this script
+:: (Crucial when run as Administrator from a shortcut, otherwise it defaults to System32)
+cd /d "%~dp0"
+
 echo =========================================
 echo Starting DLMS Meter Application...
 echo =========================================
@@ -34,7 +38,8 @@ if %COMPOSE_EXIT_CODE% equ 0 (
     echo =========================================
     
     :: Start the backend executable in a new MINIMIZED window
-    :: Use %~dp0 to ensure we are relative to the script location
+    :: Use %~dp0 to ensure we are relative to the script location.
+    :: We quote the entire path to handle directories with spaces (like Program Files)
     start "" /MIN "%~dp0dlms_meter_be\dist\run\run.exe" serve
 
     echo Waiting for the backend to be ready at http://localhost:8000...

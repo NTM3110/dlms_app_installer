@@ -52,12 +52,12 @@ export class SidebarService {
                 icon: 'settings',
                 children: [
                     {
-                        label: 'Meter & Serial Config',
+                        label: 'Meter & Serial',
                         icon: 'cable',
                         route: '/settings/meter-serial',
                     },
                     {
-                        label: 'Auto Read Schedule Config',
+                        label: 'Auto Read Schedule',
                         icon: 'schedule',
                         route: '/settings/auto-read-schedule',
                     }

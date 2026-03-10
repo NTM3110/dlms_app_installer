@@ -1,0 +1,49 @@
+# ============================================================
+# Root-level gitignore for dlms_app_installer
+# ============================================================
+
+# Compiled installer / exe
+*.exe
+
+# Celery beat schedule files (root level)
+celerybeat-schedule.bak
+celerybeat-schedule.dat
+celerybeat-schedule.dir
+
+# Log files (root level)
+error_log.txt
+logFile.txt
+
+# ============================================================
+# Backend (dlms_meter_be)
+# ============================================================
+
+# PyInstaller build output
+dlms_meter_be/build/
+dlms_meter_be/dist/
+
+# Python virtual environment
+dlms_meter_be/.venv/
+
+# Python byte-compiled / cache
+dlms_meter_be/__pycache__/
+dlms_meter_be/**/__pycache__/
+dlms_meter_be/**/*.pyc
+dlms_meter_be/**/*.pyo
+
+# Celery beat schedule files (backend)
+dlms_meter_be/celerybeat-schedule
+dlms_meter_be/celerybeat-schedule-shm
+dlms_meter_be/celerybeat-schedule-wal
+
+# Backend log file
+dlms_meter_be/logFile.txt
+
+# ============================================================
+# Frontend (dlms_meter_fe)
+# ============================================================
+# Note: dlms_meter_fe already has its own .gitignore (dist/, node_modules/, etc.)
+# Additional items not covered there:
+
+dlms_meter_fe/build_output.txt
+dlms_meter_fe/err.txt

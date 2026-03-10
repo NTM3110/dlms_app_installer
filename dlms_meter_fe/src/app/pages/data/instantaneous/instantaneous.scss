@@ -1,7 +1,7 @@
 .data-container {
     padding: 24px;
-    max-width: 1400px;
-    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -41,122 +41,162 @@
     }
 }
 
-// ─── Controls ─────────────────────────────────────
+// ─── Controls Card ─────────────────────────────────
 .controls-card {
     border-radius: var(--radius-lg) !important;
     box-shadow: var(--shadow-md) !important;
 
     mat-card-content {
-        padding: 16px !important;
+        padding: 16px 20px !important;
     }
 }
 
+// ─── Controls Row (Row 1) ─────────────────────────
+// All direct children of .controls-row that have .flex-field or .flex-group stretch equally
 .controls-row {
     display: flex;
-    flex-wrap: wrap;
     gap: 16px;
-    align-items: flex-start;
+    align-items: flex-end; // Align bottoms of all mat-form-fields
+    flex-wrap: wrap;
 
-    &.controls-row-bottom {
-        margin-top: 8px;
+    // Any direct mat-form-field marked flexible fills equal space
+    .flex-field {
+        flex: 1 1 0;
+        min-width: 130px;
+    }
+
+    // Fixed-width hour field inside dt-row
+    .field-hour {
+        width: 74px;
+        flex-shrink: 0;
+    }
+
+    .field-minute {
+        width: 68px;
+        flex-shrink: 0;
+    }
+
+    // ── DateTime Group ──────────────────────────────
+    // Wraps a label + dt-row, and itself takes equal flex space
+    &.flex-group {
+        flex: 1 1 0;
+        min-width: 240px;
+    }
+
+    // Row 2 specific
+    &.controls-actions-row {
+        margin-top: 12px;
+        flex-wrap: nowrap; // Keep path & buttons on ONE line
         align-items: center;
-    }
 
-    .field-meter {
-        flex: 1 1 220px;
+        .path-field {
+            flex: 1 1 0;
+            min-width: 200px;
+        }
     }
+}
 
-    .field-date {
-        flex: 1 1 180px;
-    }
+// ─── DateTime Group ────────────────────────────────
+.dt-group {
+    flex: 1 1 0;
+    min-width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
 
-    .field-path {
-        flex: 1 1 340px;
-    }
-
-    // ─── Time Range Group ─────────────────────────
-    .time-range-group {
+    .dt-label {
         display: flex;
-        flex-direction: column;
+        align-items: center;
         gap: 4px;
-        flex: 0 0 auto;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding-left: 2px;
+        margin-bottom: 4px;
 
-        .time-range-label {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding-left: 2px;
-
-            mat-icon {
-                font-size: 14px;
-                width: 14px;
-                height: 14px;
-            }
-        }
-
-        .time-selects {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-
-            .time-colon {
-                font-size: 20px;
-                font-weight: 700;
-                color: var(--text-secondary);
-                margin-top: -8px;
-            }
-
-            .field-hour {
-                width: 80px;
-            }
-
-            .field-minute {
-                width: 72px;
-            }
+        mat-icon {
+            font-size: 14px;
+            width: 14px;
+            height: 14px;
         }
     }
 
-    .action-buttons {
+    // Inner row: date picker takes all remaining width, hour/min fixed
+    .dt-row {
         display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 4px;
+
+        .flex-field {
+            flex: 1 1 0;
+            min-width: 100px;
+        }
+
+        .field-hour {
+            width: 74px;
+            flex-shrink: 0;
+        }
+
+        .field-minute {
+            width: 68px;
+            flex-shrink: 0;
+        }
+
+        .time-colon {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 18px; // Align with mat-form-field bottom
+            flex-shrink: 0;
+        }
+    }
+}
+
+// ─── Action Buttons ────────────────────────────────
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    align-items: center;
+
+    button {
+        height: 46px;
+        border-radius: 8px !important;
+        font-weight: 600;
+        font-size: 14px;
+        white-space: nowrap;
+        display: flex;
         align-items: center;
-        padding-top: 4px;
+        gap: 6px;
+        padding: 0 18px;
 
-        button {
-            height: 44px;
-            border-radius: 8px !important;
-            font-weight: 600;
-            letter-spacing: 0.02em;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
         }
+    }
 
-        .btn-billing {
-            background: var(--primary-color) !important;
-            color: white !important;
-        }
+    .btn-billing {
+        background: var(--primary-color) !important;
+        color: white !important;
+    }
 
-        .btn-profile {
-            background: var(--success-color) !important;
-            color: white !important;
-        }
+    .btn-profile {
+        background: var(--success-color) !important;
+        color: white !important;
+    }
 
-        .btn-export {
-            background: #6c757d !important;
-            color: white !important;
-        }
+    .btn-export {
+        background: #6c757d !important;
+        color: white !important;
+    }
 
-        .btn-report {
-            background: #e65100 !important;
-            color: white !important;
-        }
+    .btn-report {
+        background: #e65100 !important;
+        color: white !important;
     }
 }
 
@@ -183,22 +223,6 @@
         display: flex;
         align-items: flex-start;
         gap: 14px;
-    }
-
-    .stat-icon-wrap {
-        width: 50px;
-        height: 50px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-
-        mat-icon {
-            font-size: 26px;
-            width: 26px;
-            height: 26px;
-        }
     }
 
     .stat-info {
@@ -240,23 +264,17 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
-        .stat-obis {
-            font-size: 10px;
-            color: var(--text-secondary);
-            font-family: monospace;
-        }
     }
 }
 
-// ─── Results Card ─────────────────────────────────
-.results-card, .report-card {
+// ─── Results / Report Cards ────────────────────────
+.results-card,
+.report-card {
     border-radius: var(--radius-lg) !important;
     box-shadow: var(--shadow-md) !important;
     overflow: hidden;
 }
 
-// Section header for billing (no tabs)
 .section-header {
     display: flex;
     align-items: center;
@@ -274,12 +292,56 @@
     }
 }
 
-// Report card header (orange accent)
 .report-header {
     background: #e65100 !important;
 }
 
-// ─── Tabs (Profile) ────────────────────────────────
+// ─── No-file banner ────────────────────────────────
+.no-file-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #fff8e1;
+    border-bottom: 1px solid #ffe082;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #5d4037;
+
+    mat-icon {
+        color: #f57f17;
+        font-size: 22px;
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .no-file-hint {
+        display: block;
+        font-weight: 400;
+        color: #7b5e3a;
+        font-size: 12px;
+        margin-top: 2px;
+    }
+}
+
+.no-file-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #fff3e0;
+    color: #bf360c;
+    border: 1px solid #ffcc80;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-family: monospace;
+    white-space: nowrap;
+}
+
+// ─── Tabs (Profile) ───────────────────────────────
 .result-tabs {
     ::ng-deep {
         .mat-mdc-tab-header {
@@ -374,12 +436,12 @@
     height: 320px;
 }
 
-// ─── View Selector (Multi-meter result switcher) ───
+// ─── View Selector ────────────────────────────────
 .view-selector-card {
     border-radius: var(--radius-lg) !important;
     background: #fdfdfd !important;
     border: 1px solid var(--border-color) !important;
-    
+
     mat-card-content {
         padding: 12px 18px !important;
     }
@@ -388,13 +450,49 @@
 .view-selector-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    justify-content: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
 
     .field-view-meter {
-        flex: 0 1 300px;
-        margin-bottom: -1.25em; // Offset material padding
+        flex: 0 0 220px;
+        margin-bottom: -1.25em;
     }
+
+    .field-view-date {
+        flex: 0 0 220px;
+        margin-bottom: -1.25em;
+    }
+
+    .view-status-badges {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-left: auto;
+    }
+}
+
+.view-status-badge {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid #bbdefb;
+    white-space: nowrap;
+}
+
+.view-count-badge {
+    background: #f3e5f5;
+    color: #7b1fa2;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #e1bee7;
+    white-space: nowrap;
 }
 
 .view-status-badge {
@@ -416,7 +514,7 @@
 
 // ─── Tables ───────────────────────────────────────
 .table-scroll-wrap {
-    max-height: 560px;
+    max-height: 600px;
     overflow-y: auto;
     overflow-x: auto;
 }
@@ -424,16 +522,15 @@
 .full-table {
     width: 100%;
 
-    // High-contrast header: dark navy background, white text, larger font
     th.mat-mdc-header-cell {
-        background: #011b6e !important; // --primary-dark
+        background: #011b6e !important;
         color: #ffffff !important;
         font-weight: 700;
         font-size: 13px;
         letter-spacing: 0.04em;
         text-transform: uppercase;
-        padding: 16px 18px !important;
-        border-bottom: 3px solid #FF6D00 !important; // accent underline for extra separation
+        padding: 16px 20px !important;
+        border-bottom: 3px solid #FF6D00 !important;
         position: sticky;
         top: 0;
         z-index: 2;
@@ -441,8 +538,8 @@
     }
 
     td.mat-mdc-cell {
-        padding: 11px 18px !important;
-        font-size: 13px;
+        padding: 14px 20px !important;
+        font-size: 14px;
         border-bottom: 1px solid var(--border-color) !important;
         color: var(--text-primary);
     }
@@ -457,13 +554,12 @@
     }
 }
 
-// Profile table — narrower cells for many columns
 .profile-table {
 
     td.mat-mdc-cell,
     th.mat-mdc-header-cell {
         padding: 10px 12px !important;
-        min-width: 60px;
+        min-width: 65px;
         font-size: 12px;
     }
 }
@@ -479,8 +575,8 @@
     white-space: nowrap;
 }
 
-// ─── Missing Report Table ─────────────────────────
 .missing-report-table {
+
     td.mat-mdc-cell,
     th.mat-mdc-header-cell {
         vertical-align: middle;
@@ -492,9 +588,9 @@
     background: #fff3e0;
     color: #e65100;
     border: 1px solid #ffcc80;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
-    padding: 2px 10px;
+    padding: 3px 12px;
     border-radius: 99px;
     font-family: monospace;
     margin: 2px 4px 2px 0;
@@ -506,23 +602,23 @@
     background: #e8f5e9;
     color: #2e7d32;
     border: 1px solid #a5d6a7;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
-    padding: 2px 10px;
+    padding: 3px 12px;
     border-radius: 99px;
 }
 
 .value-cell {
     color: var(--primary-dark, #011b6e);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
 }
 
 .unit-badge {
     background: #e9ecef;
     color: var(--text-secondary);
-    font-size: 11px;
-    padding: 2px 8px;
+    font-size: 12px;
+    padding: 3px 10px;
     border-radius: 4px;
 }
 
@@ -577,42 +673,54 @@
 }
 
 // ─── Responsive ──────────────────────────────────
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+    .controls-row {
+        flex-wrap: wrap;
+
+        &.controls-actions-row {
+            flex-wrap: wrap;
+
+            .path-field {
+                flex: 1 1 100%;
+            }
+
+            .action-buttons {
+                flex: 1 1 100%;
+                flex-wrap: wrap;
+
+                button {
+                    flex: 1 1 calc(50% - 5px);
+                    justify-content: center;
+                }
+            }
+        }
+    }
+
+    .dt-group {
+        min-width: 200px;
+    }
+}
+
+@media (max-width: 600px) {
     .data-container {
         padding: 12px;
     }
 
     .controls-row {
         flex-direction: column;
-
-        .field-meter,
-        .field-date,
-        .field-path,
-        .time-range-group {
-            flex: 1 1 100%;
-            width: 100%;
-        }
-
-        .action-buttons {
-            width: 100%;
-
-            button {
-                flex: 1;
-            }
-        }
+        align-items: stretch;
     }
 
-    .view-selector-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-        
-        .field-view-meter {
-            width: 100%;
-        }
+    .dt-group {
+        min-width: unset;
+        width: 100%;
     }
 
     .stat-cards-row {
         grid-template-columns: 1fr 1fr;
+    }
+
+    .action-buttons button {
+        flex: 1 1 100%;
     }
 }

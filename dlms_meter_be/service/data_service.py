@@ -297,12 +297,24 @@ def generate_missing_data_report(
 ):
     """
     For each outstation, read its CSV for target_date and find 30-min intervals
-    within [start_time, end_time] that are missing (empty string '""').
-    Consecutive missing slots are collapsed into gap ranges.
-    Returns: list of {meter, date, missing_gaps: [{from, to}]}
+    within [start_time, end_time] that are missing (empty string).
+    - If target_date is TODAY, future intervals (beyond current 30-min slot) are excluded.
+    - If no CSV file exists, no_file=True is returned so FE can recommend reading profile.
+    - Consecutive missing slots are collapsed into gap ranges.
+    Returns: list of {meter, date, no_file, missing_gaps: [{from, to}]}
     """
     start_idx = _time_str_to_interval_idx(start_time)
     end_idx = _time_str_to_interval_idx(end_time)
+
+    # Clip end_idx to current time when target_date is today
+    now = datetime.datetime.now()
+    if target_date == now.date():
+        current_slot = now.hour * 2 + (now.minute // 30)
+        # Only consider slots that have already started (current slot is available)
+        effective_end_idx = min(end_idx, current_slot)
+    else:
+        effective_end_idx = end_idx
+
     report = []
 
     for outstation in outstations:
@@ -310,14 +322,15 @@ def generate_missing_data_report(
         csv_rows = read_profile_from_csv(filepath)
 
         if not csv_rows:
-            # Entire date is missing for this meter
+            # No CSV file at all for this date — flag separately so FE can recommend reading profile
             report.append({
                 "meter": outstation,
                 "date": target_date.strftime("%d-%m-%Y"),
+                "no_file": True,
                 "missing_gaps": [{
                     "from": _interval_idx_to_time_str(start_idx),
-                    "to": _interval_idx_to_time_str(end_idx)
-                }]
+                    "to": _interval_idx_to_time_str(effective_end_idx)
+                }] if effective_end_idx >= start_idx else []
             })
             continue
 
@@ -327,7 +340,7 @@ def generate_missing_data_report(
         for row in csv_rows:
             if len(row) < 3:
                 continue
-            for i in range(start_idx, end_idx + 1):
+            for i in range(start_idx, effective_end_idx + 1):
                 col = i + 2  # offset: col0=date, col1=var, col2..=intervals
                 val = str(row[col]).strip() if col < len(row) else ""
                 is_empty = val in ("", "NaN")
@@ -340,7 +353,7 @@ def generate_missing_data_report(
         # Collapse consecutive missing slots into ranges
         missing_gaps = []
         gap_start = None
-        for i in range(start_idx, end_idx + 1):
+        for i in range(start_idx, effective_end_idx + 1):
             if all_vars_empty.get(i, True):
                 if gap_start is None:
                     gap_start = i
@@ -354,12 +367,13 @@ def generate_missing_data_report(
         if gap_start is not None:
             missing_gaps.append({
                 "from": _interval_idx_to_time_str(gap_start),
-                "to": _interval_idx_to_time_str(end_idx)
+                "to": _interval_idx_to_time_str(effective_end_idx)
             })
 
         report.append({
             "meter": outstation,
             "date": target_date.strftime("%d-%m-%Y"),
+            "no_file": False,
             "missing_gaps": missing_gaps
         })
 
